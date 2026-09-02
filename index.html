@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Myanmar Construction Flash - Roof Calculator</title>
+  <title>Myanmar Construction Flash</title>
   <link rel="manifest" href="manifest.json">
   <style>
     :root {
@@ -22,15 +22,19 @@
     .app-bar {
       background-color: var(--primary-green);
       color: white;
-      padding: 16px;
+      padding: 14px;
       text-align: center;
       font-weight: bold;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .container { max-width: 480px; margin: 0 auto; padding: 16px; }
 
-    /* Form Card */
+    /* Card Layout */
     .card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -67,6 +71,10 @@
       padding: 14px;
     }
 
+    /* Tab Management */
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+
     /* Sponsor Banner */
     .sponsor-card {
       background: var(--light-green);
@@ -91,117 +99,120 @@
       position: fixed; bottom: 0; left: 0; right: 0;
       background: white; display: flex; justify-content: space-around;
       padding: 8px 0; border-top: 1px solid var(--border-color);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
     }
-    .nav-item { text-align: center; font-size: 0.75rem; color: #777; text-decoration: none; }
+    .nav-item { text-align: center; font-size: 0.75rem; color: #777; text-decoration: none; cursor: pointer; flex: 1; }
     .nav-item.active { color: var(--primary-green); font-weight: bold; }
   </style>
 </head>
 <body>
 
- <div class="app-bar" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3DjGzbyiwSiI5UVaq-TWF5YRk0RDTtQgVHFzFplQrXNsiH_HjZ1An9MNedkZ8eTEIeQq2c5h4ziRUmhAG4ZmfHi6tCE-mqDC9kzSaIQCZZfSNrWc03xfjP3Z1tcOz5MIJQyUqv8JseqV70CmWBlN-793u0RNO-Ln-0zxsHwb2FxJLHnAbw3VKZp7RshRD/s1600/logo%202.jpg" alt="Logo" style="height: 30px; width: 30px; object-fit: contain; border-radius: 50%;">
-  <span>Myanmar Construction Flash</span>
-</div>
+  <div class="app-bar">
+    <img src="logo.png" alt="Logo" style="height: 28px; width: 28px; object-fit: contain; border-radius: 50%; display: none;" id="appLogo">
+    <span>⚡ Myanmar Construction Flash</span>
+  </div>
 
   <div class="container">
-    <div class="card">
-      <!-- ခေါင်မိုး ဒီဇိုင်း -->
-      <div class="form-group">
-        <label>ခေါင်မိုး ဒီဇိုင်း အမျိုးအစား ရွေးပါ:</label>
-        <select id="roofDesign" onchange="updateDesignDetails()">
-          <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6jg5aV-eICSIi62PfKw7UvujogTSIpXgsX1NbyqkSPydcvjl9HjRWSpPonSqQoPr3BxUoyYQJkFVQFV2js-9jissKfifRox9i80vxCeSihq0rrwJpPripM6XddQMmp1PyVmF7TkTWmHM3JpVKEx036zcGw2Yh_9pq4cU7g4sHkv7tQFTttekAkmeUVHF/w400-h246/low%20budget%20house%20title.jpg" data-labour="2500" value="gable">နှစ်ဖက်ချခေါင်မိုး (Gable Roof)</option>
-          <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZYZ2876OHQ6-H3ey8OZq_c36Tyye-5L226tAtECT4u-LgerUJ0hRrle9K7941MjPxEe4ZmEZ-LF-vq1TtbPi3xG27RSQ6rXznK_9DonK83H7D7qWGOvn3bRyfTaOl2IkExeusCRaGvMGOogTgQPTecHc-kGneuskHnuH3FhwVPf_G7DoDYLAjpUS9gkCc/w400-h272/carpark2.jpg" data-labour="2000" value="leanto">တစ်ဖက်စောင်းခေါင်းမိုး (Lean-to Roof)</option>
-          <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOm6VmEk9_80WpFCds07-ROyegJIlHuUh34ewpmBLPxUaWd3a2_VUhUbrpxdco5hPDZ7XB8OL6mc3_kJlWkVPVPCa4FYsFKwXQsQGv-TDAhLSqiktpHvpnSccmLWhbSmFVljJfnahgbSjwV2ApjVzHEP-BWSNpz-6grCq1PnsiXuBQGQjE-C_GJTYOJiXb/w400-h151/house%20a.jpg" data-labour="3000" value="hip">လေးဖက်ချခေါင်မိုး (Hip Roof)</option>
-        </select>
-      </div>
-
-      <!-- ပုံပြရန် -->
-      <div style="margin-bottom: 12px; text-align: center;">
-        <img id="designImage" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6jg5aV-eICSIi62PfKw7UvujogTSIpXgsX1NbyqkSPydcvjl9HjRWSpPonSqQoPr3BxUoyYQJkFVQFV2js-9jissKfifRox9i80vxCeSihq0rrwJpPripM6XddQMmp1PyVmF7TkTWmHM3JpVKEx036zcGw2Yh_9pq4cU7g4sHkv7tQFTttekAkmeUVHF/w400-h246/low%20budget%20house%20title.jpg" style="border-radius: 8px; max-height: 160px; width: 100%; object-fit: cover;">
-      </div>
-
-      <!-- သွပ်ပြား အကျိုးရှိအကျယ် -->
-      <div class="form-group">
-        <label>သွပ်ပြား အကျိုးရှိအကျယ် (Effective Width) ရွေးပါ:</label>
-        <select id="sheetWidth">
-          <option value="2.5">4 Angle / 11 Line (အကျိုးရှိအကျယ် ၂ ပေခွဲ)</option>
-          <option value="2.0">Line သွပ်ပြား (အကျိုးရှိအကျယ် ၂ ပေ)</option>
-        </select>
-      </div>
-
-      <!-- သွပ်ပြား အမျိုးအစားနှင့် ဈေးနှုန်း -->
-      <div class="form-group">
-        <label>သွပ်ပြား အထူနှင့် စက်ရုံ ရွေးပါ:</label>
-        <select id="sheetPricePerFt">
-          <option value="2100">0.30 mm - China PPGI (2,100 ကျပ်/ပေ)</option>
-          <option value="2550">0.30 mm Brick Red - China (2,550 ကျပ်/ပေ)</option>
-          <option value="3050">0.312 mm - China PPGI (3,050 ကျပ်/ပေ)</option>
-
-          <option value="3100">0.312 mm - China ALZ (3,100 ကျပ်/ပေ)</option>
-          <option value="3650">0.32 mm - China PPGI/ALZ (3,650 ကျပ်/ပေ)</option>
-          <option value="4200">0.36 mm - China PPGI (4,200 ကျပ်/ပေ)</option>
-          <option value="6600" selected>0.36 mm - Vietnam PPGL AZ100 (6,600 ကျပ်/ပေ)</option>
-          <option value="6700">0.40 mm - Vietnam PPGL AZ100 (6,700 ကျပ်/ပေ)</option>
-          <option value="7200">0.42 mm - Vietnam PPGL AZ100 (7,200 ကျပ်/ပေ)</option>
-          <option value="8500">0.50 mm - Vietnam PPGL AZ100 (8,500 ကျပ်/ပေ)</option>
-        </select>
-      </div>
-
-      <!-- အိမ်အလျားနှင့် အနံ -->
-      <div class="form-row">
+    
+    <!-- TAB 1: Calculator Page -->
+    <div id="calcView" class="tab-page active">
+      <div class="card">
         <div class="form-group">
-          <label>အိမ်အလျား (ပေ)</label>
-          <input type="number" id="len" value="30">
+          <label>ခေါင်းမိုး ဒီဇိုင်း အမျိုးအစား ရွေးပါ:</label>
+          <select id="roofDesign" onchange="updateDesignDetails()">
+            <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6jg5aV-eICSIi62PfKw7UvujogTSIpXgsX1NbyqkSPydcvjl9HjRWSpPonSqQoPr3BxUoyYQJkFVQFV2js-9jissKfifRox9i80vxCeSihq0rrwJpPripM6XddQMmp1PyVmF7TkTWmHM3JpVKEx036zcGw2Yh_9pq4cU7g4sHkv7tQFTttekAkmeUVHF/w400-h246/low%20budget%20house%20title.jpg" data-labour="2500" value="gable">နှစ်ဖက်ချခေါင်းမိုး (Gable Roof)</option>
+            <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZYZ2876OHQ6-H3ey8OZq_c36Tyye-5L226tAtECT4u-LgerUJ0hRrle9K7941MjPxEe4ZmEZ-LF-vq1TtbPi3xG27RSQ6rXznK_9DonK83H7D7qWGOvn3bRyfTaOl2IkExeusCRaGvMGOogTgQPTecHc-kGneuskHnuH3FhwVPf_G7DoDYLAjpUS9gkCc/w400-h272/carpark2.jpg" data-labour="2000" value="leanto">တစ်ဖက်စောင်းခေါင်းမိုး (Lean-to Roof)</option>
+            <option data-img="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOm6VmEk9_80WpFCds07-ROyegJIlHuUh34ewpmBLPxUaWd3a2_VUhUbrpxdco5hPDZ7XB8OL6mc3_kJlWkVPVPCa4FYsFKwXQsQGv-TDAhLSqiktpHvpnSccmLWhbSmFVljJfnahgbSjwV2ApjVzHEP-BWSNpz-6grCq1PnsiXuBQGQjE-C_GJTYOJiXb/w400-h151/house%20a.jpg" data-labour="3000" value="hip">လေးဖက်ချခေါင်းမိုး (Hip Roof)</option>
+          </select>
         </div>
+
+        <div style="margin-bottom: 12px; text-align: center;">
+          <img id="designImage" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6jg5aV-eICSIi62PfKw7UvujogTSIpXgsX1NbyqkSPydcvjl9HjRWSpPonSqQoPr3BxUoyYQJkFVQFV2js-9jissKfifRox9i80vxCeSihq0rrwJpPripM6XddQMmp1PyVmF7TkTWmHM3JpVKEx036zcGw2Yh_9pq4cU7g4sHkv7tQFTttekAkmeUVHF/w400-h246/low%20budget%20house%20title.jpg" style="border-radius: 8px; max-height: 160px; width: 100%; object-fit: cover;">
+        </div>
+
         <div class="form-group">
-          <label>အိမ်အနံ (ပေ)</label>
-          <input type="number" id="wid" value="15">
-        </div>
-      </div>
-
-      <!-- အဝဲအထွက် -->
-      <div class="form-group">
-        <label>အပြင်ဖက် အဝဲအထွက်:</label>
-        <select id="overhang">
-          <option value="1" selected>၁ ပေ အထွက်</option>
-          <option value="2">၂ ပေ အထွက်</option>
-          <option value="0">အဝဲမထုတ်ပါ</option>
-        </select>
-      </div>
-
-      <!-- ခေါင်ချိုး အစောင်း -->
-      <div class="form-group">
-        <label>အမိုး အစောင်း / ခေါင်ချိုး အချိုး:</label>
-        <select id="slope">
-          <option value="1.054">၄ လက်မ ခေါင်ချိုး (Standard Slope)</option>
-          <option value="1.083">၅ လက်မ ခေါင်ချိုး (ခေါင်မြင့် Slope)</option>
-          <option value="1.000">အတန်း/ပြင်ညီ မိုး (Flat Slope)</option>
-        </select>
-      </div>
-
-      <!-- လက်ခနှုန်းထား -->
-      <div class="form-group">
-        <label>လက်ခနှုန်းထား (၁ စတုရန်းပေ / ကျပ်):</label>
-        <input type="number" id="labourRate" value="2500">
-      </div>
-
-      <button class="btn-calc" onclick="calcSheets()">တွက်ချက်မည်</button>
-
-      <!-- ရလဒ်ပြသခြင်း -->
-      <div id="result" class="result-box">
-        <p style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">📊 တွက်ချက်မှု ရလဒ်များ</p>
-        
-        <div id="sideDetail" style="background: #e1efe5; border-radius: 6px; font-size: 0.8rem; margin-bottom: 8px; padding: 8px;">
-          <b>📌 ခေါင်မိုး ၁ ဖက်လျှင်:</b> အရှည် <span id="resOneSideLen">0</span> ပေပြား | လိုအပ်မည့် အရေအတွက်: <span id="resOneSideSheets">0</span> ချပ်
+          <label>သွပ်ပြား အကျိုးရှိအကျယ် (Effective Width) ရွေးပါ:</label>
+          <select id="sheetWidth">
+            <option value="2.5">4 Angle / 11 Line (အကျိုးရှိအကျယ် ၂ ပေခွဲ)</option>
+            <option value="2.0">Line သွပ်ပြား (အကျိုးရှိအကျယ် ၂ ပေ)</option>
+          </select>
         </div>
 
-        <p style="font-size: 0.85rem; margin: 4px 0;">သုံးရမည့် သွပ်ပြားအရှည်: <b id="resSheetLenNeeded" style="color: var(--primary-green);">0</b> ပေပြား</p>
-        <p style="font-size: 0.95rem; margin: 6px 0;"><b>စုစုပေါင်း လိုအပ်မည့် သွပ်ပြား: <span id="resSheets" style="color: var(--primary-green);">0</span> ချပ်</b></p>
-        <p style="font-size: 0.85rem; margin: 4px 0;">သွပ်ပြား ၁ ချပ်ဈေး: <b id="resPerSheet">0</b> ကျပ်</p>
-        <p style="font-size: 0.85rem; margin: 4px 0;">သွပ်ပြား ကုန်ကျစရိတ် စုစုပေါင်း: <b id="resMat">0</b> ကျပ်</p>
-        <p style="font-size: 0.85rem; margin: 4px 0;">လက်ခ စုစုပေါင်း (<span id="resSqft">0</span> စတုရန်းပေ): <b id="resLabour">0</b> ကျပ်</p>
-        <hr style="border: none; border-top: 1px dashed #ccc; margin: 8px 0;">
-        <p style="color: #d93025; font-size: 1.05rem; font-weight: bold; margin: 0;">စုစုပေါင်း စရိတ်: <span id="resTotal">0</span> ကျပ်</p>
+        <div class="form-group">
+          <label>သွပ်ပြား အထူနှင့် စက်ရုံ ရွေးပါ:</label>
+          <select id="sheetPricePerFt">
+            <option value="2100">0.30 mm - China PPGI (2,100 ကျပ်/ပေ)</option>
+            <option value="2550">0.30 mm Brick Red - China (2,550 ကျပ်/ပေ)</option>
+            <option value="3050">0.312 mm - China PPGI (3,050 ကျပ်/ပေ)</option>
+            <option value="3100">0.312 mm - China ALZ (3,100 ကျပ်/ပေ)</option>
+            <option value="3650">0.32 mm - China PPGI/ALZ (3,650 ကျပ်/ပေ)</option>
+            <option value="4200">0.36 mm - China PPGI (4,200 ကျပ်/ပေ)</option>
+            <option value="6600" selected>0.36 mm - Vietnam PPGL AZ100 (6,600 ကျပ်/ပေ)</option>
+            <option value="6700">0.40 mm - Vietnam PPGL AZ100 (6,700 ကျပ်/ပေ)</option>
+            <option value="7200">0.42 mm - Vietnam PPGL AZ100 (7,200 ကျပ်/ပေ)</option>
+            <option value="8500">0.50 mm - Vietnam PPGL AZ100 (8,500 ကျပ်/ပေ)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>အိမ်အလျား (ပေ)</label>
+            <input type="number" id="len" value="30">
+          </div>
+          <div class="form-group">
+            <label>အိမ်အနံ (ပေ)</label>
+            <input type="number" id="wid" value="15">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>အပြင်ဖက် အဝဲအထွက်:</label>
+          <select id="overhang">
+            <option value="1" selected>၁ ပေ အထွက်</option>
+            <option value="2">၂ ပေ အထွက်</option>
+            <option value="0">အဝဲမထုတ်ပါ</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>အမိုး အစောင်း / ခေါင်ချိုး အချိုး:</label>
+          <select id="slope">
+            <option value="1.054">၄ လက်မ ခေါင်ချိုး (Standard Slope)</option>
+            <option value="1.083">၅ လက်မ ခေါင်ချိုး (ခေါင်မြင့် Slope)</option>
+            <option value="1.000">အတန်း/ပြင်ညီ မိုး (Flat Slope)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>လက်ခနှုန်းထား (၁ စတုရန်းပေ / ကျပ်):</label>
+          <input type="number" id="labourRate" value="2500">
+        </div>
+
+        <button class="btn-calc" onclick="calcSheets()">တွက်ချက်မည်</button>
+
+        <div id="result" class="result-box">
+          <p style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">📊 တွက်ချက်မှု ရလဒ်များ</p>
+          
+          <div id="sideDetail" style="background: #e1efe5; border-radius: 6px; font-size: 0.8rem; margin-bottom: 8px; padding: 8px;">
+            <b>📌 ခေါင်မိုး ၁ ဖက်လျှင်:</b> အရှည် <span id="resOneSideLen">0</span> ပေပြား | လိုအပ်မည့် အရေအတွက်: <span id="resOneSideSheets">0</span> ချပ်
+          </div>
+
+          <p style="font-size: 0.85rem; margin: 4px 0;">သုံးရမည့် သွပ်ပြားအရှည်: <b id="resSheetLenNeeded" style="color: var(--primary-green);">0</b> ပေပြား</p>
+          <p style="font-size: 0.95rem; margin: 6px 0;"><b>စုစုပေါင်း လိုအပ်မည့် သွပ်ပြား: <span id="resSheets" style="color: var(--primary-green);">0</span> ချပ်</b></p>
+          <p style="font-size: 0.85rem; margin: 4px 0;">သွပ်ပြား ၁ ချပ်ဈေး: <b id="resPerSheet">0</b> ကျပ်</p>
+          <p style="font-size: 0.85rem; margin: 4px 0;">သွပ်ပြား ကုန်ကျစရိတ် စုစုပေါင်း: <b id="resMat">0</b> ကျပ်</p>
+          <p style="font-size: 0.85rem; margin: 4px 0;">လက်ခ စုစုပေါင်း (<span id="resSqft">0</span> စတုရန်းပေ): <b id="resLabour">0</b> ကျပ်</p>
+          <hr style="border: none; border-top: 1px dashed #ccc; margin: 8px 0;">
+          <p style="color: #d93025; font-size: 1.05rem; font-weight: bold; margin: 0;">စုစုပေါင်း စရိတ်: <span id="resTotal">0</span> ကျပ်</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Google Sheet Prices Page -->
+    <div id="priceView" class="tab-page">
+      <div class="card" style="padding: 10px;">
+        <h3 style="margin-bottom: 10px; color: var(--primary-green); font-size: 1rem; text-align: center;">📋 မြန်မာ့ ဆောက်လုပ်ရေးဈေးနှုန်းများ</h3>
+        <iframe src="https://docs.google.com/spreadsheets/d/11nNSzL_6Zgwe0CFmOO8tq5XJGqDDjRHlyKnqg03yrEM/pubhtml?widget=true&amp;headers=false" style="width: 100%; height: 70vh; border: none; border-radius: 8px;"></iframe>
       </div>
     </div>
 
@@ -214,17 +225,24 @@
       </div>
       <a href="tel:0912345678" class="btn-contact">ဆက်သွယ်ရန်</a>
     </div>
+
   </div>
 
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
-    <a href="#" class="nav-item">🏠<br>Home</a>
-    <a href="#" class="nav-item active">🧮<br>Calc</a>
-    <a href="#" class="nav-item">🏪<br>Shops</a>
-    <a href="#" class="nav-item">📞<br>Contact</a>
+    <div class="nav-item active" onclick="switchTab('calcView', this)">🧮<br>Calc</div>
+    <div class="nav-item" onclick="switchTab('priceView', this)">📋<br>Prices</div>
   </div>
 
   <script>
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      element.classList.add('active');
+    }
+
     function updateDesignDetails() {
       let select = document.getElementById('roofDesign');
       let selectedOption = select.options[select.selectedIndex];
