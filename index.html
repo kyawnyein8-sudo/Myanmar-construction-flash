@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Myanmar Construction Flash</title>
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#006b3f">
+<meta name="mobile-web-app-capable" content="yes">
   <style>
     :root {
       --primary-green: #006b3f;
@@ -215,6 +217,7 @@
        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT0Rbe_lK2zWyvMT9fc0oyNRsPFrOnassQp8fT2ptQbVC5PbPEOKJPo__cUcJHKYA3KFoZM5EFVQbNK/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false" style="width: 100%; height: 70vh; border: none; border-radius: 8px;"></iframe>
       </div>
     </div>
+    
 
     <!-- Sponsor Banner -->
   <div class="sponsor-card">
@@ -227,8 +230,16 @@
 </div>
 
   </div>
-
-  <!-- Bottom Navigation -->
+<!-- PWA Install Card -->
+<div id="installCard" class="card" style="display: none; text-align: center; background: #e6f5eb; border: 1px solid #006b3f;">
+  <p style="font-size: 0.85rem; font-weight: bold; color: #006b3f; margin-bottom: 8px;">
+    📱 ဒီ Calculator ကို အင်တာနက်မလိုဘဲ ဖုန်းထဲမှာ App လို သုံးချင်ပါသလား။
+  </p>
+  <button id="installBtn" style="width: 100%; background: #006b3f; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer;">
+    📲 App အဖြစ် Install ပြုလုပ်ရန်
+  </button>
+</div>
+   <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('calcView', this)">🧮<br>Calc</div>
     <div class="nav-item" onclick="switchTab('priceView', this)">📋<br>Prices</div>
@@ -304,5 +315,44 @@
       document.getElementById('result').style.display = 'block';
     }
   </script>
+  <script>
+  // PWA Install Prompt Logic
+  let deferredPrompt;
+  const installCard = document.getElementById("installCard");
+  const installBtn = document.getElementById("installBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installCard) installCard.style.display = "block";
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        console.log("App installed");
+      }
+      deferredPrompt = null;
+      if (installCard) installCard.style.display = "none";
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    if (installCard) installCard.style.display = "none";
+  });
+
+  // Service Worker Registration
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("./service-worker.js")
+        .then(() => console.log("Service Worker registered"))
+        .catch((err) => console.log("Service Worker error:", err));
+    });
+  }
+</script>
 </body>
 </html>
