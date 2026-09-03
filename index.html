@@ -6,7 +6,7 @@
   <title>Myanmar Construction Flash</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#006b3f">
-<meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <style>
     :root {
       --primary-green: #006b3f;
@@ -20,7 +20,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 70px; }
 
-    /* Top App Bar */
     .app-bar {
       background-color: var(--primary-green);
       color: white;
@@ -36,7 +35,6 @@
 
     .container { max-width: 480px; margin: 0 auto; padding: 16px; }
 
-    /* Card Layout */
     .card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -63,7 +61,6 @@
       font-size: 1rem; cursor: pointer; margin-top: 8px;
     }
 
-    /* Result Box */
     .result-box {
       background: #f0f7f2;
       border-left: 4px solid var(--primary-green);
@@ -73,11 +70,9 @@
       padding: 14px;
     }
 
-    /* Tab Management */
     .tab-page { display: none; }
     .tab-page.active { display: block; }
 
-    /* Sponsor Banner */
     .sponsor-card {
       background: var(--light-green);
       border: 1px dashed var(--primary-green);
@@ -96,7 +91,6 @@
       padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; text-decoration: none;
     }
 
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: white; display: flex; justify-content: space-around;
@@ -141,7 +135,7 @@
         </div>
 
         <div class="form-group">
-          <label>သွပ်ပြား အထူနှင့် စက်ရုံ ရွေးပါ:</label>
+          <label>သွပ်ပြား အထူနှင့် စက်ရုံ ရွေးပါ:</label>
           <select id="sheetPricePerFt">
             <option value="2100">0.30 mm - China PPGI (2,100 ကျပ်/ပေ)</option>
             <option value="2550">0.30 mm Brick Red - China (2,550 ကျပ်/ပေ)</option>
@@ -229,7 +223,6 @@
   <a href="viber://chat?number=%2B959264134142" class="btn-contact" style="background: #7360f2;">Viber ဖြင့် ဆက်သွယ်ရန်</a>
 </div>
 
-  </div>
 <!-- PWA Install Card -->
 <div id="installCard" class="card" style="display: none; text-align: center; background: #e6f5eb; border: 1px solid #006b3f;">
   <p style="font-size: 0.85rem; font-weight: bold; color: #006b3f; margin-bottom: 8px;">
@@ -239,6 +232,9 @@
     📲 App အဖြစ် Install ပြုလုပ်ရန်
   </button>
 </div>
+
+  </div>
+
    <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('calcView', this)">🧮<br>Calc</div>
@@ -275,31 +271,50 @@
       let labourRate = parseFloat(document.getElementById('labourRate').value) || 0;
 
       let totalW = w + (overhang * 2);
+      let totalL = l + (overhang * 2);
       let sideDetailDiv = document.getElementById('sideDetail');
 
-      let sheetsPerSide = Math.ceil(l / effWidth);
+      let sheetsPerSide = 0;
       let oneSideRoofLen = 0;
       let neededSheetLength = 0;
       let totalSheets = 0;
+      let roofArea = 0;
 
       if (roofDesign === 'gable') {
         oneSideRoofLen = (totalW / 2) * slopeMultiplier;
         neededSheetLength = Math.ceil(oneSideRoofLen);
+        sheetsPerSide = Math.ceil(totalL / effWidth);
         totalSheets = sheetsPerSide * 2;
+        roofArea = totalL * totalW * slopeMultiplier;
 
         document.getElementById('resOneSideLen').innerText = neededSheetLength;
         document.getElementById('resOneSideSheets').innerText = sheetsPerSide;
         sideDetailDiv.style.display = 'block';
-      } else {
+
+      } else if (roofDesign === 'leanto') {
         oneSideRoofLen = totalW * slopeMultiplier;
         neededSheetLength = Math.ceil(oneSideRoofLen);
+        sheetsPerSide = Math.ceil(totalL / effWidth);
         totalSheets = sheetsPerSide;
+        roofArea = totalL * totalW * slopeMultiplier;
+
+        sideDetailDiv.style.display = 'none';
+
+      } else if (roofDesign === 'hip') {
+        const halfSpan = totalW / 2;
+        oneSideRoofLen = halfSpan * slopeMultiplier;
+        neededSheetLength = Math.ceil(oneSideRoofLen);
+
+        // Hip roof: approximate sheet count + 10% cutting/waste allowance
+        roofArea = totalL * totalW * slopeMultiplier;
+        const areaPerSheet = effWidth * neededSheetLength;
+        totalSheets = Math.ceil((roofArea / areaPerSheet) * 1.10);
 
         sideDetailDiv.style.display = 'none';
       }
 
       let pricePerSheet = pricePerFt * neededSheetLength;
-      let sqft = l * totalW;
+      let sqft = Math.ceil(roofArea);
       let totalMat = totalSheets * pricePerSheet;
       let totalLabour = sqft * labourRate;
       let grandTotal = totalMat + totalLabour;
