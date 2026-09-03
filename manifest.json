@@ -2,7 +2,7 @@
   "name": "Myanmar Construction Flash",
   "short_name": "Construction Flash",
   "description": "Myanmar Construction Materials Price & Calculator",
-  "start_url": "./",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f4f8f5",
   "theme_color": "#006b3f",
@@ -11,12 +11,14 @@
     {
       "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3DjGzbyiwSiI5UVaq-TWF5YRk0RDTtQgVHFzFplQrXNsiH_HjZ1An9MNedkZ8eTEIeQq2c5h4ziRUmhAG4ZmfHi6tCE-mqDC9kzSaIQCZZfSNrWc03xfjP3Z1tcOz5MIJQyUqv8JseqV70CmWBlN-793u0RNO-Ln-0zxsHwb2FxJLHnAbw3VKZp7RshRD/s1600/logo%202.jpg",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     },
     {
       "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3DjGzbyiwSiI5UVaq-TWF5YRk0RDTtQgVHFzFplQrXNsiH_HjZ1An9MNedkZ8eTEIeQq2c5h4ziRUmhAG4ZmfHi6tCE-mqDC9kzSaIQCZZfSNrWc03xfjP3Z1tcOz5MIJQyUqv8JseqV70CmWBlN-793u0RNO-Ln-0zxsHwb2FxJLHnAbw3VKZp7RshRD/s1600/logo%202.jpg",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }
